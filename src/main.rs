@@ -1,7 +1,6 @@
-use std::process::exit;
-
 use crate::temperature::{convert, scale_from_str, scale_to_str};
 use clap::{ArgAction, Parser};
+use std::process::exit;
 use temperature::Scale;
 
 mod temperature;
