@@ -7,9 +7,9 @@ use clap::{ArgAction, Parser};
 use length::convert_length;
 use temperature::convert_temperature;
 
-/// -------------------------------------------------
-/// Conv - a converter to convert between unit scales
-/// -------------------------------------------------
+/// -----------------------------------------------------------
+/// Conv - a converter to convert between unit scales and units
+/// -----------------------------------------------------------
 
 /// Temperature scales:
 ///   - °C  Celsius     "c" | "celsius"
@@ -55,7 +55,7 @@ struct Args {
     #[clap(long, short, action=ArgAction::SetTrue)]
     verbose: bool,
 
-    /// Determines what to convert - "t" (temperature, default), "l" (length)
+    /// Determines what to convert - "t" (temperature), "l" (length)
     #[clap(long, short, default_value = "t")]
     mode: String,
 }
