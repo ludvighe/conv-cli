@@ -1,3 +1,6 @@
+use crate::Args;
+use std::process::exit;
+
 #[derive(Debug, Clone, Copy)]
 pub enum Scale {
     Farenheit,
@@ -7,7 +10,52 @@ pub enum Scale {
     Reaumur,
 }
 
-pub fn convert(scale: Scale, value: f32, to: Scale) -> f32 {
+pub fn convert_temperature(args: Args) -> f32 {
+    fn parse_temperature_args(args: Args) -> (Scale, f32, Scale) {
+        let value = match args.value.trim().parse::<f32>() {
+            Ok(v) => v,
+            Err(_) => {
+                println!("Invalid temperature value");
+                exit(1);
+            }
+        };
+        let from_scale = match scale_from_str(args.from) {
+            Ok(v) => v,
+            Err(_) => {
+                println!("Invalid temperature scale (from)");
+                exit(1);
+            }
+        };
+        let to_scale = match scale_from_str(args.to) {
+            Ok(v) => v,
+            Err(_) => {
+                println!("Invalid temperature scale (to)");
+                exit(1);
+            }
+        };
+
+        (from_scale, value, to_scale)
+    }
+
+    let verbose = args.verbose;
+
+    let (from_scale, value, to_scale) = parse_temperature_args(args);
+    let result = convert(from_scale, value, to_scale);
+
+    if verbose {
+        println!("Convering from {from_scale:?} to {to_scale:?}");
+        println!(
+            "{value} {} = {result} {}",
+            scale_to_str(from_scale),
+            scale_to_str(to_scale)
+        );
+    } else {
+        println!("{result}");
+    }
+    result
+}
+
+fn convert(scale: Scale, value: f32, to: Scale) -> f32 {
     match scale {
         Scale::Celsius => match to {
             Scale::Celsius => value,
@@ -51,18 +99,18 @@ pub fn convert(scale: Scale, value: f32, to: Scale) -> f32 {
     }
 }
 
-pub fn scale_from_str(s: String) -> Option<Scale> {
+fn scale_from_str(s: String) -> Result<Scale, ()> {
     match s.to_lowercase().as_str() {
-        "c" | "celsius" => Some(Scale::Celsius),
-        "f" | "farenheit" => Some(Scale::Farenheit),
-        "k" | "kelvin" => Some(Scale::Kelvin),
-        "r" | "rankine" => Some(Scale::Rankine),
-        "re" | "ré" | "reaumur" | "réaumur" => Some(Scale::Reaumur),
-        _ => None,
+        "c" | "celsius" => Ok(Scale::Celsius),
+        "f" | "farenheit" => Ok(Scale::Farenheit),
+        "k" | "kelvin" => Ok(Scale::Kelvin),
+        "r" | "rankine" => Ok(Scale::Rankine),
+        "re" | "ré" | "reaumur" | "réaumur" => Ok(Scale::Reaumur),
+        _ => Err(()),
     }
 }
 
-pub fn scale_to_str(s: Scale) -> &'static str {
+fn scale_to_str(s: Scale) -> &'static str {
     match s {
         Scale::Celsius => "°C",
         Scale::Farenheit => "°F",

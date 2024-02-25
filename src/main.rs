@@ -1,9 +1,11 @@
-use crate::temperature::{convert, scale_from_str, scale_to_str};
-use clap::{ArgAction, Parser};
-use std::process::exit;
-use temperature::Scale;
-
+mod length;
 mod temperature;
+
+use std::process::exit;
+
+use clap::{ArgAction, Parser};
+use length::convert_length;
+use temperature::convert_temperature;
 
 /// -------------------------------------------------
 /// Conv - a converter to convert between unit scales
@@ -20,58 +22,37 @@ mod temperature;
 struct Args {
     /// The numerical value to be converted.
     #[arg(allow_hyphen_values = true)]
-    value: f32,
+    value: String,
 
-    /// The scale from which to convert.
+    /// The scale/unit from which to convert.
     from: String,
-    /// The scale to which the value should be converted.
+    /// The scale/unit to which the value should be converted.
     to: String,
 
     #[clap(long, short, action=ArgAction::SetTrue)]
     verbose: bool,
+
+    /// Determines what to convert - "t" (temperature, default), "l" (length)
+    #[clap(long, short, default_value = "t")]
+    mode: String,
 }
 
 fn main() {
     let args = Args::parse();
 
-    convert_temperature(args);
-}
+    let parsed_mode = args.mode.trim().to_lowercase();
+    let parsed_mode = parsed_mode.as_str();
 
-fn convert_temperature(args: Args) -> f32 {
-    fn parse_temperature_args(args: Args) -> (Scale, f32, Scale) {
-        let value = args.value;
-        let from_scale = match scale_from_str(args.from) {
-            Some(v) => v,
-            None => {
-                println!("Invalid temperature scale (from)");
-                exit(1);
-            }
-        };
-        let to_scale = match scale_from_str(args.to) {
-            Some(v) => v,
-            None => {
-                println!("Invalid temperature scale (to)");
-                exit(1);
-            }
-        };
-
-        (from_scale, value, to_scale)
+    match parsed_mode {
+        "t" | "temp" | "temperature" => {
+            convert_temperature(args);
+        }
+        "l" | "len" | "length" => {
+            convert_length(args);
+        }
+        _ => {
+            println!("Invalid mode");
+            exit(1);
+        }
     }
-
-    let verbose = args.verbose;
-
-    let (from_scale, value, to_scale) = parse_temperature_args(args);
-    let result = convert(from_scale, value, to_scale);
-
-    if verbose {
-        println!("Convering from {from_scale:?} to {to_scale:?}");
-        println!(
-            "{value} {} = {result} {}",
-            scale_to_str(from_scale),
-            scale_to_str(to_scale)
-        );
-    } else {
-        println!("{result}");
-    }
-    result
 }
