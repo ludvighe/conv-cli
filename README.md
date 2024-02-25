@@ -16,8 +16,8 @@ Temperature scales:
   - K   Kelvin      "k" | "kelvin"
   - °R  Rankine     "r" | "rankine"
   - °Ré Réaumur     "re" | "ré" | "reaumur" | "réaumur"
-
 Length units:
+  - Planck              "lp" | "planck"
   - Angstrom            "å" | "a" | "ångström" | "angstrom"
   - Nanometer           "nm" | "nanometer"
   - Micron              "μ" | "micron"

@@ -24,6 +24,7 @@ enum Unit {
     Mile = 17,
     Capefoot = 18,
     Rod = 19,
+    Planck = 20,
 }
 
 impl Unit {
@@ -49,6 +50,7 @@ impl Unit {
             "mi" | "mile" => Unit::Mile,
             "cf" | "capefoot" => Unit::Capefoot,
             "rd" | "rod" => Unit::Rod,
+            "lp" | "planck" => Unit::Planck,
             _ => return Err(()),
         };
         Ok(result)
@@ -75,11 +77,12 @@ impl Unit {
             Unit::Mile => "mi",
             Unit::Capefoot => "cf",
             Unit::Rod => "rd",
+            Unit::Planck => "lp",
         }
     }
 }
 
-const UNIT_CONVERSIONS: [f64; 20] = [
+const UNIT_CONVERSIONS: [f64; 21] = [
     1e-10,                   // angstrom
     1e-9,                    // nanometer
     1e-6,                    // micron
@@ -100,6 +103,7 @@ const UNIT_CONVERSIONS: [f64; 20] = [
     1609.344,                // mile
     0.31485557516,           // capefoot
     0.314856,                // rod
+    1.616255e-35,            // planck
 ];
 
 pub fn convert_length(args: Args) -> f64 {
