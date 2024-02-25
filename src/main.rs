@@ -10,12 +10,35 @@ use temperature::convert_temperature;
 /// -------------------------------------------------
 /// Conv - a converter to convert between unit scales
 /// -------------------------------------------------
+
 /// Temperature scales:
 ///   - °C  Celsius     "c" | "celsius"
 ///   - °F  Farenheit   "f" | "farenheit"
 ///   - K   Kelvin      "k" | "kelvin"
 ///   - °R  Rankine     "r" | "rankine"
 ///   - °Ré Réaumur     "re" | "ré" | "reaumur" | "réaumur"
+
+/// Length units:
+///   - Angstrom            "å" | "a" | "ångström" | "angstrom"
+///   - Nanometer           "nm" | "nanometer"
+///   - Micron              "μ" | "micron"
+///   - Millimeter          "mm" | "millimeter"
+///   - Centimeter          "cm" | "centimeter"
+///   - Meter               "m" | "meter"
+///   - Kilometer           "km" | "kilometer"
+///   - LightSecond         "ls" | "lightsecond"
+///   - LightMinute         "lm" | "lightminute"
+///   - LightHour           "lh" | "lighthour"
+///   - LightDay            "ld" | "lightday"
+///   - LightYear           "ly" | "lightyear"
+///   - AstronomicalUnit    "au" | "astronomical"
+///   - Parsec              "ps" | "parsec"
+///   - Inch                "in" | "inch"
+///   - Foot                "ft" | "foot"
+///   - Yard                "yd" | "yard"
+///   - Mile                "mi" | "mile"
+///   - Capefoot            "cf" | "capefoot"
+///   - Rod                 "rd" | "rod"
 
 #[derive(Parser, Debug, Clone)]
 #[command(version, about, verbatim_doc_comment)]
